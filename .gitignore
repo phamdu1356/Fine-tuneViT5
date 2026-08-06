@@ -1,0 +1,34 @@
+# Local Codex instructions; keep these files out of the repository.
+AGENTS.md
+AGENTS.override.md
+.agents.md
+
+# Python environments and caches.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local configuration and secrets.
+.env
+.env.*
+!.env.example
+
+# Training data, logs, checkpoints and generated outputs.
+data/raw/
+data/processed/
+outputs/
+checkpoints/
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Notebook and OS metadata.
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
