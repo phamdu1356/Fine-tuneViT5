@@ -1,0 +1,9 @@
+DATASET LOCKED - version v2
+locked_at_utc: 2026-08-09T02:55:59+00:00
+parquet: vietnews_v2.parquet
+parquet_sha256: 8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681
+dataset_hash: 25732a293d436fd3216d7ba6325e8c27b878d3a458b562782f7d38a7c4d56f93
+split_v2_counts: {"train": 93471, "test": 28762, "validation": 21578}
+review_approved_by: Nguoi dung
+QUY TẮC: test v2 bị khóa - không dùng để chọn hyperparameter/checkpoint.
+Muốn thay đổi -> tạo version mới (v3...).

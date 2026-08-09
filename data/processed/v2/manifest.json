@@ -1,0 +1,194 @@
+{
+  "project": "Fine-tuneViT5",
+  "version": "v2",
+  "seed": 42,
+  "created_at_utc": "2026-08-09T02:55:59+00:00",
+  "thresholds": {
+    "flag_empty": true,
+    "min_abstract_chars": 20,
+    "max_abstract_to_article": 0.75,
+    "near_dup_jaccard": 0.9,
+    "max_article_chars": 20000,
+    "max_abstract_chars": 2000,
+    "near_dup_cap_group": 50,
+    "cut_512": 512,
+    "cut_1024": 1024,
+    "cut_cover_min": 0.9
+  },
+  "split_v2_ratio": {
+    "train": 0.65,
+    "validation": 0.15,
+    "test": 0.2
+  },
+  "split_v2_targets": {
+    "train": 93477,
+    "validation": 21572,
+    "test": 28762
+  },
+  "eval_pack": {
+    "n_total": 300,
+    "n_per_bucket": 100,
+    "seed": 42
+  },
+  "data_raw_dir": "D:\\code\\Fine-tuneViT5\\data\\raw\\vietnews",
+  "out_dir": "D:\\code\\Fine-tuneViT5\\data\\processed\\v2",
+  "replay_v1": {
+    "rows": 143811,
+    "dropped_by_split": [
+      {
+        "split": "train",
+        "dropped": 4
+      },
+      {
+        "split": "validation",
+        "dropped": 0
+      },
+      {
+        "split": "test",
+        "dropped": 1
+      }
+    ]
+  },
+  "raw_checksums": {
+    "data\\raw\\vietnews\\train-00000-of-00001-84acb79f6c6547a5.parquet": "865f8747eea43fd54188395f9875aa95e790c57155469d987324745ec8b760cc",
+    "data\\raw\\vietnews\\validation-00000-of-00001-210cc51bf3cdb90f.parquet": "922b33d7d49e5a8da2bf36eee95ce0a2a5c193603dc58084111a67d95cae4687",
+    "data\\raw\\vietnews\\test-00000-of-00001-123f98d55067eb7b.parquet": "c79f674a58fa46c11f48ac08debe25fbc63bae14302812fe457d6a679b836352"
+  },
+  "raw_schema": {
+    "train": {
+      "rows": 99134,
+      "columns": [
+        "guid",
+        "title",
+        "abstract",
+        "article"
+      ],
+      "dtypes": {
+        "guid": "int64",
+        "title": "object",
+        "abstract": "object",
+        "article": "object"
+      }
+    },
+    "validation": {
+      "rows": 22184,
+      "columns": [
+        "guid",
+        "title",
+        "abstract",
+        "article"
+      ],
+      "dtypes": {
+        "guid": "int64",
+        "title": "object",
+        "abstract": "object",
+        "article": "object"
+      }
+    },
+    "test": {
+      "rows": 22498,
+      "columns": [
+        "guid",
+        "title",
+        "abstract",
+        "article"
+      ],
+      "dtypes": {
+        "guid": "int64",
+        "title": "object",
+        "abstract": "object",
+        "article": "object"
+      }
+    }
+  },
+  "pii_count": 1124,
+  "pii_masked_cells": 1124,
+  "near_dup_scan": {
+    "mode": "screening",
+    "note": "chỉ so sánh cặp cùng bucket gần đúng, nhóm > cap bị bỏ qua => không phải bằng chứng tuyệt đối",
+    "groups_total": 100481,
+    "groups_checked": 100388,
+    "groups_skipped_cap": 93,
+    "pairs_checked": 208174,
+    "pairs_found": 68
+  },
+  "leak_count": 0,
+  "near_dup_xsplit_scan": {
+    "mode": "screening",
+    "groups_checked": 11545,
+    "groups_skipped": 234,
+    "pairs_checked": 147929
+  },
+  "token_stats": [
+    {
+      "split": "train",
+      "n": 99130,
+      "art_mean": 821.9,
+      "art_max": 4751,
+      "abs_mean": 57.7,
+      "abs_max": 239,
+      "over_512": 73606,
+      "over_512_pct": 74.25,
+      "over_1024": 26139,
+      "over_1024_pct": 26.37
+    },
+    {
+      "split": "validation",
+      "n": 22184,
+      "art_mean": 828.7,
+      "art_max": 4511,
+      "abs_mean": 58.1,
+      "abs_max": 223,
+      "over_512": 16552,
+      "over_512_pct": 74.61,
+      "over_1024": 6005,
+      "over_1024_pct": 27.07
+    },
+    {
+      "split": "test",
+      "n": 22497,
+      "art_mean": 830.1,
+      "art_max": 4097,
+      "abs_mean": 58.4,
+      "abs_max": 197,
+      "over_512": 16816,
+      "over_512_pct": 74.75,
+      "over_1024": 6099,
+      "over_1024_pct": 27.11
+    }
+  ],
+  "near_dup_merge_scan": {
+    "mode": "screening",
+    "note": "nhóm > near_dup_cap_group bị bỏ qua; kết quả không phải chứng minh tuyệt đối",
+    "groups_total": 176,
+    "groups_checked": 176,
+    "groups_skipped_cap": 0,
+    "pairs_compared": 176,
+    "pairs_grouped": 176
+  },
+  "split_v2_leak_exact": 0,
+  "split_v2_leak_near": 0,
+  "split_v2_leak_near_note": "chỉ xét cặp trong nhóm băm đã duyệt; nhóm > near_dup_cap_group không được chứng minh",
+  "cutoff_coverage_rows": 38224,
+  "review_queue_counts": {
+    "audit_flags.csv": 41,
+    "fact_flags.csv": 76098,
+    "label_flags.csv": 2,
+    "near_duplicates.csv": 68,
+    "near_duplicates_cross_split.csv": 108,
+    "pii.csv": 1124
+  },
+  "review_total_pending": 77441,
+  "review_approved": true,
+  "review_approval_by": "Nguoi dung",
+  "out_parquet": "data\\processed\\v2\\vietnews_v2.parquet",
+  "out_parquet_sha256": "8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681",
+  "n_rows": 143811,
+  "dataset_hash": "25732a293d436fd3216d7ba6325e8c27b878d3a458b562782f7d38a7c4d56f93",
+  "split_v2_counts": {
+    "train": 93471,
+    "test": 28762,
+    "validation": 21578
+  },
+  "eval_pack_ids_sha256": "f7d10c1c4d064bdf1a71e4e5648303c84ff598433b9d1481a8b90e140ff1a412"
+}
