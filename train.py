@@ -490,6 +490,77 @@ def save_training_info(output_dir: str, cfg: dict, env: dict, metrics: dict | No
     logger.info("Saved training_info.json → %s", path)
 
 
+def plot_metrics(log_history: list[dict], output_dir: str) -> None:
+    """Vẽ biểu đồ loss và metrics từ log_history."""
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        logger.warning("Không tìm thấy matplotlib. Bỏ qua vẽ biểu đồ. Hãy cài đặt: pip install matplotlib")
+        return
+
+    train_loss = []
+    val_loss = []
+    val_rouge1 = []
+    val_rouge2 = []
+    val_rouge_l = []
+    train_steps = []
+    val_steps = []
+
+    for log in log_history:
+        step = log.get("step", 0)
+        if "loss" in log:
+            train_loss.append(log["loss"])
+            train_steps.append(step)
+        if "eval_loss" in log:
+            val_loss.append(log["eval_loss"])
+            val_steps.append(step)
+            if "eval_rouge1" in log:
+                val_rouge1.append(log["eval_rouge1"])
+            if "eval_rouge2" in log:
+                val_rouge2.append(log["eval_rouge2"])
+            if "eval_rouge_l" in log:
+                val_rouge_l.append(log["eval_rouge_l"])
+
+    if not train_loss and not val_loss:
+        logger.warning("Không có dữ liệu loss để vẽ.")
+        return
+
+    plt.figure(figsize=(12, 5))
+
+    # Loss plot
+    plt.subplot(1, 2, 1)
+    if train_loss:
+        plt.plot(train_steps, train_loss, label='Train Loss')
+    if val_loss:
+        plt.plot(val_steps, val_loss, label='Val Loss')
+    plt.xlabel('Steps')
+    plt.ylabel('Loss')
+    plt.title('Training & Validation Loss')
+    plt.legend()
+    plt.grid(True)
+
+    # Metrics plot (được coi như Accuracy cho bài toán text generation)
+    plt.subplot(1, 2, 2)
+    if val_rouge1 or val_rouge2 or val_rouge_l:
+        if val_rouge1:
+            plt.plot(val_steps, val_rouge1, label='Val ROUGE-1')
+        if val_rouge2:
+            plt.plot(val_steps, val_rouge2, label='Val ROUGE-2')
+        if val_rouge_l:
+            plt.plot(val_steps, val_rouge_l, label='Val ROUGE-L')
+        plt.xlabel('Steps')
+        plt.ylabel('Score')
+        plt.title('Validation ROUGE Scores (Accuracy)')
+        plt.legend()
+        plt.grid(True)
+
+    plt.tight_layout()
+    plot_path = Path(output_dir) / "training_metrics.png"
+    plt.savefig(plot_path)
+    plt.close()
+    logger.info("Đã lưu biểu đồ metrics tại: %s", plot_path)
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # 8. Main
 # ══════════════════════════════════════════════════════════════════════════════
@@ -677,6 +748,9 @@ def main() -> None:
     # ── Save training_info.json ───────────────────────────────────────────────
     all_metrics = {**train_metrics, **eval_metrics}
     save_training_info(out_dir, cfg, env, all_metrics)
+
+    # ── Plot metrics ──────────────────────────────────────────────────────────
+    plot_metrics(trainer.state.log_history, out_dir)
 
     # ── Summary ───────────────────────────────────────────────────────────────
     logger.info("=" * 60)
