@@ -1,0 +1,122 @@
+# ============================================================
+# configs/train_v1.yaml — Cấu hình training đầy đủ cho cloud GPU
+# ============================================================
+# Cách dùng:
+#   python train.py --config configs/train_v1.yaml
+#   accelerate launch train.py --config configs/train_v1.yaml
+#
+# Để tùy chỉnh: chỉ cần thay đổi giá trị trong file này.
+# Tất cả hyperparameters đều có thể override qua --override key=value:
+#   python train.py --config configs/train_v1.yaml \
+#       --override training.learning_rate=1e-4 \
+#       --override training.num_train_epochs=3
+# ============================================================
+
+# ─────────────────────────────────────────────
+# Model & Tokenizer
+# ─────────────────────────────────────────────
+model:
+  name_or_path: "VietAI/vit5-base"
+  # Revision để pin version, "main" nếu không cần pin
+  revision: "main"
+  # Để dùng local cache: đặt đường dẫn thư mục (tuyệt đối hoặc tương đối)
+  # name_or_path: "models/vit5-base"
+
+# ─────────────────────────────────────────────
+# Dataset
+# ─────────────────────────────────────────────
+data:
+  parquet_path: "data/processed/v2/vietnews_v2.parquet"
+  # Dataset v2 đã được lock — SHA256 để xác nhận toàn vẹn
+  expected_sha256: "8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681"
+  # Tên cột trong parquet
+  split_column: "split_v2"           # "train" | "validation" | "test"
+  source_column: "article_norm"      # input: bài báo đã normalize
+  target_column: "abstract_norm"     # target: tóm tắt đã normalize
+  # Độ dài token tối đa (cắt khi tokenize, không thay đổi parquet)
+  max_source_length: 512             # ~74% mẫu > 512 → cắt; 1024 dùng nhiều VRAM hơn
+  max_target_length: 128             # mean ~58 tokens, giữ thêm biên
+
+# ─────────────────────────────────────────────
+# Hugging Face Training Arguments
+# ─────────────────────────────────────────────
+training:
+  output_dir: "outputs/checkpoints"
+
+  # Epochs & Steps
+  num_train_epochs: 5
+  max_steps: -1                      # -1 = dùng num_train_epochs; đặt số dương để giới hạn steps
+
+  # Batch size & Gradient Accumulation
+  # effective_batch_size = per_device_train_batch_size * gradient_accumulation_steps * num_gpus
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  gradient_accumulation_steps: 4    # → effective batch = 32 (1 GPU)
+
+  # Learning rate & Schedule
+  learning_rate: 5.0e-4             # T5 thường dùng LR cao hơn BERT-family
+  lr_scheduler_type: "linear"       # "linear" | "cosine" | "constant" | "polynomial"
+  warmup_ratio: 0.05                 # 5% đầu dùng warmup; override warmup_steps nếu muốn
+  # warmup_steps: 500               # dùng thay warmup_ratio nếu muốn số steps cố định
+
+  # Regularization
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  # Precision — chọn 1 trong 3 (không bật cùng lúc)
+  fp16: true                         # dùng cho GPU NVIDIA không hỗ trợ bf16 (Turing, Ampere cũ)
+  bf16: false                        # dùng cho A100, H100, RTX 4090 (Ampere+); ổn định hơn fp16
+  # Nếu CPU: đặt cả hai thành false
+
+  # Reproducibility
+  seed: 42
+  data_seed: 42
+
+  # Checkpointing
+  save_strategy: "epoch"             # "epoch" | "steps"
+  # save_steps: 500                  # dùng nếu save_strategy="steps"
+  save_total_limit: 3                # giữ 3 checkpoint gần nhất (tiết kiệm disk)
+
+  # Evaluation
+  eval_strategy: "epoch"            # "epoch" | "steps" (đồng bộ với save_strategy)
+  # eval_steps: 500                  # dùng nếu eval_strategy="steps"
+  load_best_model_at_end: true
+  metric_for_best_model: "rouge_l"  # chọn checkpoint tốt nhất theo ROUGE-L
+  greater_is_better: true
+
+  # Logging
+  logging_steps: 50                  # log mỗi 50 steps
+  report_to: "none"                  # "none" | "wandb" | "tensorboard" | "all"
+  # wandb_project: "fine-tune-vit5"  # cần WANDB_API_KEY nếu dùng wandb
+
+  # DataLoader
+  dataloader_num_workers: 4          # tăng nếu CPU mạnh; đặt 0 nếu Windows có vấn đề
+  dataloader_pin_memory: true        # true khi dùng GPU
+
+  # Predict with generate (quan trọng cho seq2seq eval)
+  predict_with_generate: true
+
+  # Resume
+  resume_from_checkpoint: null       # đặt đường dẫn checkpoint để resume, ví dụ:
+  # resume_from_checkpoint: "outputs/checkpoints/checkpoint-1000"
+
+# ─────────────────────────────────────────────
+# Generation config (dùng khi eval trong lúc train)
+# ─────────────────────────────────────────────
+generation:
+  max_new_tokens: 128
+  num_beams: 4                       # beam search; 1 = greedy (nhanh hơn, kém hơn)
+  early_stopping: true
+  no_repeat_ngram_size: 3            # tránh lặp 3-gram
+  length_penalty: 1.0               # > 1.0 ưu tiên output dài hơn
+
+# ─────────────────────────────────────────────
+# Packaging (dùng bởi package_model.py)
+# ─────────────────────────────────────────────
+packaging:
+  best_model_dir: "outputs/checkpoints/best"
+  # test_inference_text: dùng để kiểm tra inference sau khi đóng gói
+  test_inference_text: >
+    Thủ tướng Chính phủ vừa ký quyết định phê duyệt chương trình phát triển
+    kinh tế xã hội giai đoạn 2025-2030, với mục tiêu tăng trưởng GDP đạt
+    trung bình 7 phần trăm mỗi năm và nâng cao chất lượng cuộc sống người dân.

@@ -1,0 +1,86 @@
+# ============================================================
+# configs/train_smoke.yaml — Smoke test config (CPU, máy local)
+# ============================================================
+# Kế thừa toàn bộ từ train_v1.yaml, chỉ override các tham số cần thiết
+# để chạy nhanh trên CPU, xác nhận pipeline end-to-end hoạt động.
+#
+# Cách dùng:
+#   python train.py --config configs/train_smoke.yaml --smoke
+# ============================================================
+
+model:
+  name_or_path: "VietAI/vit5-base"
+  revision: "main"
+
+data:
+  parquet_path: "data/processed/v2/vietnews_v2.parquet"
+  expected_sha256: "8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681"
+  split_column: "split_v2"
+  source_column: "article_norm"
+  target_column: "abstract_norm"
+  # Cắt ngắn hơn để chạy nhanh trên CPU
+  max_source_length: 128
+  max_target_length: 64
+
+training:
+  output_dir: "outputs/smoke_test"
+
+  # Smoke test: giới hạn số steps, không quan tâm convergence
+  num_train_epochs: 1
+  max_steps: 2                       # chỉ chạy 2 steps để xác nhận forward+backward OK
+
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 1
+
+  learning_rate: 5.0e-4
+  lr_scheduler_type: "linear"
+  warmup_ratio: 0.0
+
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+
+  # CPU: tắt fp16/bf16
+  fp16: false
+  bf16: false
+
+  seed: 42
+  data_seed: 42
+
+  save_strategy: "steps"
+  save_steps: 2
+  save_total_limit: 1
+
+  eval_strategy: "steps"
+  eval_steps: 2
+  load_best_model_at_end: false      # false để tiết kiệm thời gian
+
+  metric_for_best_model: "rouge_l"
+  greater_is_better: true
+
+  logging_steps: 1
+  report_to: "none"
+
+  # CPU: 0 workers để tránh lỗi multiprocessing trên Windows
+  dataloader_num_workers: 0
+  dataloader_pin_memory: false
+
+  predict_with_generate: true
+  resume_from_checkpoint: null
+
+generation:
+  max_new_tokens: 64
+  num_beams: 1                       # greedy decode để nhanh
+  early_stopping: false
+  no_repeat_ngram_size: 0
+
+packaging:
+  best_model_dir: "outputs/smoke_test/best"
+  test_inference_text: "Chính phủ ban hành quyết định mới về phát triển kinh tế."
+
+# ─────────────────────────────────────────────
+# Smoke-specific limits (chỉ dùng khi --smoke flag)
+# ─────────────────────────────────────────────
+smoke_limits:
+  max_train_samples: 32
+  max_eval_samples: 16
