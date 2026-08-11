@@ -99,10 +99,9 @@ def apply_overrides(cfg: dict, overrides: list[str]) -> dict:
 def apply_smoke_overrides(cfg: dict) -> dict:
     """Áp dụng giới hạn smoke test từ cfg['smoke_limits'] (nếu có)."""
     limits = cfg.get("smoke_limits", {})
-    # Giới hạn steps
+    # Giới hạn steps (cho phép người dùng override qua command line)
     cfg.setdefault("training", {})
-    cfg["training"]["max_steps"] = cfg["training"].get("max_steps", 2)
-    if cfg["training"].get("max_steps", -1) <= 0 or cfg["training"]["max_steps"] > 2:
+    if "max_steps" not in cfg["training"]:
         cfg["training"]["max_steps"] = 2
     # Tắt fp16/bf16 khi không có CUDA
     try:
