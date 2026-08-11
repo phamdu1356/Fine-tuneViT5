@@ -1,0 +1,38 @@
+# ============================================================
+# Fine-tuneViT5 — Python dependencies
+# ============================================================
+# Cài đặt:
+#   pip install -r requirements.txt
+#
+# Trên cloud GPU (CUDA 12.x):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+#   pip install -r requirements.txt
+#
+# Trên local CPU (smoke test):
+#   pip install torch  (CPU build tự động)
+#   pip install -r requirements.txt
+# ============================================================
+
+# --- Core ML ---
+# torch: cài riêng theo GPU/CPU (xem hướng dẫn trên)
+transformers>=4.40.0
+datasets>=2.18.0
+accelerate>=0.30.0
+sentencepiece>=0.1.99
+
+# --- Evaluation ---
+rouge_score>=0.1.2
+evaluate>=0.4.0          # optional, fallback về rouge_score nếu thiếu
+
+# --- Data ---
+pandas>=2.0.0
+pyarrow>=14.0.0
+numpy>=1.24.0
+
+# --- Config & Utilities ---
+PyYAML>=6.0
+tqdm>=4.65.0
+
+# --- Notebook (data pipeline, không cần cho train) ---
+# jupyter
+# ipykernel
