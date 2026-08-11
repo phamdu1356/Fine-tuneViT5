@@ -34,7 +34,7 @@ data:
   source_column: "article_norm"      # input: bài báo đã normalize
   target_column: "abstract_norm"     # target: tóm tắt đã normalize
   # Độ dài token tối đa (cắt khi tokenize, không thay đổi parquet)
-  max_source_length: 512             # ~74% mẫu > 512 → cắt; 1024 dùng nhiều VRAM hơn
+  max_source_length: 2048             # ~74% mẫu > 512 → cắt; 1024 dùng nhiều VRAM hơn
   max_target_length: 128             # mean ~58 tokens, giữ thêm biên
 
 # ─────────────────────────────────────────────
