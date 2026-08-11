@@ -34,7 +34,7 @@ data:
   source_column: "article_norm"      # input: bài báo đã normalize
   target_column: "abstract_norm"     # target: tóm tắt đã normalize
   # Độ dài token tối đa (cắt khi tokenize, không thay đổi parquet)
-  max_source_length: 2048             # ~74% mẫu > 512 → cắt; 1024 dùng nhiều VRAM hơn
+  max_source_length: 1024            # Điểm cân bằng tốc độ/chất lượng; ~26% train vượt 1024 token
   max_target_length: 128             # mean ~58 tokens, giữ thêm biên
 
 # ─────────────────────────────────────────────
@@ -44,14 +44,14 @@ training:
   output_dir: "outputs/checkpoints"
 
   # Epochs & Steps
-  num_train_epochs: 5
+  num_train_epochs: 3
   max_steps: -1                      # -1 = dùng num_train_epochs; đặt số dương để giới hạn steps
 
   # Batch size & Gradient Accumulation
   # effective_batch_size = per_device_train_batch_size * gradient_accumulation_steps * num_gpus
-  per_device_train_batch_size: 4     # Giảm từ 8 xuống 4 để tránh OutOfMemory
-  per_device_eval_batch_size: 8      # Giảm eval batch size để tránh OOM lúc eval
-  gradient_accumulation_steps: 8    # Tăng từ 4 lên 8 để giữ nguyên effective batch = 32 (1 GPU)
+  per_device_train_batch_size: 8     # RTX 5090 32 GB; giảm về 4 nếu benchmark báo OOM
+  per_device_eval_batch_size: 4      # Beam search dùng đỉnh VRAM cao hơn training
+  gradient_accumulation_steps: 4     # Giữ effective batch = 32 trên 1 GPU
 
   # Learning rate & Schedule
   learning_rate: 5.0e-4             # T5 thường dùng LR cao hơn BERT-family
@@ -64,11 +64,11 @@ training:
   max_grad_norm: 1.0
 
   # Precision & Memory Optimization
-  fp16: true                         # dùng cho GPU NVIDIA không hỗ trợ bf16 (Turing, Ampere cũ)
-  bf16: false                        # dùng cho A100, H100, RTX 4090 (Ampere+); ổn định hơn fp16
+  fp16: false                        # RTX 5090 dùng bf16 thay cho fp16
+  bf16: true                         # ổn định hơn fp16 trên GPU hỗ trợ bf16
   # Nếu CPU: đặt cả hai thành false
   # Bật gradient_checkpointing để tiết kiệm lượng lớn VRAM (đánh đổi tốc độ train chậm hơn một chút)
-  gradient_checkpointing: true
+  gradient_checkpointing: false      # 32 GB VRAM đủ cho ViT5-base ở context 1024; bật lại nếu OOM
 
   # Reproducibility
   seed: 42
