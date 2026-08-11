@@ -49,9 +49,9 @@ training:
 
   # Batch size & Gradient Accumulation
   # effective_batch_size = per_device_train_batch_size * gradient_accumulation_steps * num_gpus
-  per_device_train_batch_size: 8
-  per_device_eval_batch_size: 16
-  gradient_accumulation_steps: 4    # → effective batch = 32 (1 GPU)
+  per_device_train_batch_size: 4     # Giảm từ 8 xuống 4 để tránh OutOfMemory
+  per_device_eval_batch_size: 8      # Giảm eval batch size để tránh OOM lúc eval
+  gradient_accumulation_steps: 8    # Tăng từ 4 lên 8 để giữ nguyên effective batch = 32 (1 GPU)
 
   # Learning rate & Schedule
   learning_rate: 5.0e-4             # T5 thường dùng LR cao hơn BERT-family
@@ -63,10 +63,12 @@ training:
   weight_decay: 0.01
   max_grad_norm: 1.0
 
-  # Precision — chọn 1 trong 3 (không bật cùng lúc)
+  # Precision & Memory Optimization
   fp16: true                         # dùng cho GPU NVIDIA không hỗ trợ bf16 (Turing, Ampere cũ)
   bf16: false                        # dùng cho A100, H100, RTX 4090 (Ampere+); ổn định hơn fp16
   # Nếu CPU: đặt cả hai thành false
+  # Bật gradient_checkpointing để tiết kiệm lượng lớn VRAM (đánh đổi tốc độ train chậm hơn một chút)
+  gradient_checkpointing: true
 
   # Reproducibility
   seed: 42

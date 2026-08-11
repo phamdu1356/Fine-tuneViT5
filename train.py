@@ -422,9 +422,10 @@ def build_training_args(cfg: dict, output_dir: str | None = None):
         # Regularization
         weight_decay=float(t.get("weight_decay", 0.01)),
         max_grad_norm=float(t.get("max_grad_norm", 1.0)),
-        # Precision
+        # Precision & Memory
         fp16=bool(t.get("fp16", False)),
         bf16=bool(t.get("bf16", False)),
+        gradient_checkpointing=bool(t.get("gradient_checkpointing", False)),
         # Seed
         seed=int(t.get("seed", 42)),
         data_seed=int(t.get("data_seed", 42)),
