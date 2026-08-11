@@ -451,15 +451,27 @@ def build_training_args(cfg: dict, output_dir: str | None = None):
         generation_num_beams=int(gen.get("num_beams", 4)),
     )
 
-    # Loai bo cac tham so khong hop le
-    # transformers 5.x: warmup_ratio la deprecated, chi dung warmup_steps
-    if kwargs["warmup_steps"] > 0:
-        del kwargs["warmup_ratio"]
-    elif kwargs.get("warmup_ratio", 0) > 0:
-        del kwargs["warmup_steps"]  # tranh xung dot khi warmup_ratio duoc dat
+    # Xử lý các tham số không hợp lệ hoặc deprecated trong transformers 5.x
+    import transformers as _hf
+    _hf_version = tuple(int(x) for x in _hf.__version__.split(".")[:2])
+
+    if _hf_version >= (5, 0):
+        # transformers 5.x loại bỏ hoàn toàn warmup_ratio
+        if "warmup_ratio" in kwargs:
+            if kwargs["warmup_ratio"] > 0 and kwargs.get("warmup_steps", 0) == 0:
+                logger.warning("transformers >= 5.x không còn hỗ trợ `warmup_ratio`. Hãy sử dụng `warmup_steps` thay thế trong file config (VD: warmup_steps: 500). Tạm thời đặt warmup_steps = 0.")
+            del kwargs["warmup_ratio"]
     else:
-        # ca hai deu 0: chi giu warmup_steps=0, xoa warmup_ratio
-        del kwargs["warmup_ratio"]
+        # transformers 4.x: chỉ được truyền 1 trong 2
+        if kwargs.get("warmup_steps", 0) > 0:
+            if "warmup_ratio" in kwargs:
+                del kwargs["warmup_ratio"]
+        elif kwargs.get("warmup_ratio", 0) > 0:
+            if "warmup_steps" in kwargs:
+                del kwargs["warmup_steps"]
+        else:
+            if "warmup_ratio" in kwargs:
+                del kwargs["warmup_ratio"]
 
     return Seq2SeqTrainingArguments(**kwargs)
 
