@@ -25,6 +25,7 @@ __pycache__/
 data/raw/
 data/processed/
 outputs/
+eval_output/
 checkpoints/
 *.ckpt
 *.safetensors
