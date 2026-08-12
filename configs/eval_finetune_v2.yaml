@@ -1,0 +1,42 @@
+model:
+  name_or_path: "VietAI/vit5-base" #sửa path model để load finetuned
+  revision: "main" # không rõ finetune có cần dòng này không :V chắc không nên sau bỏ
+  use_fast_tokenizer: true
+
+data:
+  parquet_path: "data/processed/v2/vietnews_v2.parquet"
+  expected_sha256: "8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681"
+  split_column: "split_v2"
+  split_name: "test"
+  id_column: "id"
+  source_column: "article_norm"
+  reference_column: "abstract_norm"
+  max_source_length: 1024
+  max_target_length: 128
+  truncation: true
+
+generation:
+  num_beams: 4
+  max_new_tokens: 128
+  do_sample: false
+  no_repeat_ngram_size: 3
+
+evaluation:
+  metrics:
+    - rouge
+    - meteor
+    - bertscore
+  batch_size: 4
+  save_predictions: true
+  limit: null
+  bertscore_model_type: "xlm-roberta-base"
+  bertscore_language: "vi"
+  bertscore_batch_size: 4
+
+output:
+  root_dir: "eval_output/finetune"
+  predictions_filename: "predictions.jsonl.gz"
+  metrics_filename: "metrics.json"
+  run_info_filename: "run_info.json"
+  bertscore_filename: "bertscore.json"
+  final_metrics_filename: "final_metrics.json"

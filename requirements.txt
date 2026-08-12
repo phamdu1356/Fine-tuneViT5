@@ -15,25 +15,29 @@
 
 # --- Core ML ---
 # torch: cài riêng theo GPU/CPU (xem hướng dẫn trên)
-transformers>=4.40.0
+transformers==4.46.3
 datasets>=2.18.0
 accelerate>=0.30.0
-sentencepiece>=0.1.99
+sentencepiece==0.2.0
+tokenizers==0.20.3
 
 # --- Evaluation ---
 rouge_score>=0.1.2
 evaluate>=0.4.0          # optional, fallback về rouge_score nếu thiếu
+bert-score>=0.3.13
+nltk>=3.8.1
 
 # --- Data ---
 pandas>=2.0.0
 pyarrow>=14.0.0
 numpy>=1.24.0
+fsspec[http]<=2026.6.0,>=2023.1.0
 
 # --- Config & Utilities ---
 PyYAML>=6.0
 tqdm>=4.65.0
 matplotlib>=3.7.0
 
-# --- Notebook (data pipeline, không cần cho train) ---
-# jupyter
-# ipykernel
+# --- Notebook ---
+jupyter>=1.0.0
+ipykernel>=6.29.0
