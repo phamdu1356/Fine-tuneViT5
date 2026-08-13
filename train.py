@@ -280,16 +280,24 @@ def build_tokenize_fn(tokenizer, max_source: int, max_target: int):
     def tokenize(examples):
         # Tokenize source (article) và target (abstract) cùng lúc
         # Dùng text_target= — tương thích transformers 4.x & 5.x (as_target_tokenizer đã deprecated)
+        # Tokenize source
         model_inputs = tokenizer(
             examples["source"],
-            text_target=examples["target"],
             max_length=max_source,
-            max_target_length=max_target,
             truncation=True,
-            padding=False,          # padding động sẽ do DataCollator xử lý
+            padding=False,
         )
+        
+        # Tokenize target separately to use max_target_length
+        labels = tokenizer(
+            text_target=examples["target"],
+            max_length=max_target,
+            truncation=True,
+            padding=False,
+        )
+        
         # QUAN TRỌNG: thay pad_token_id bằng -100 để loss không tính padding
-        label_ids = model_inputs["labels"]
+        label_ids = labels["input_ids"]
         label_ids = [
             [(-100 if token == tokenizer.pad_token_id else token) for token in seq]
             for seq in label_ids
