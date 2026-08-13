@@ -48,6 +48,26 @@ if hasattr(sys.stdout, 'buffer') and sys.stdout.encoding and sys.stdout.encoding
     sys.stdout = _io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
     sys.stderr = _io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
+# Fix PyTorch 2.6 weights_only=True load error for numpy arrays in rng_state.pth
+try:
+    import torch
+    import numpy as np
+    try:
+        import numpy.core.multiarray
+        torch.serialization.add_safe_globals([numpy.core.multiarray._reconstruct])
+    except (ImportError, AttributeError):
+        pass
+    try:
+        import numpy._core.multiarray
+        torch.serialization.add_safe_globals([numpy._core.multiarray._reconstruct])
+    except (ImportError, AttributeError):
+        pass
+    try:
+        torch.serialization.add_safe_globals([np.ndarray])
+    except Exception:
+        pass
+except Exception:
+    pass
 
 # ─── Logging setup ────────────────────────────────────────────────────────────
 logging.basicConfig(
