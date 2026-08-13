@@ -469,6 +469,7 @@ def build_training_args(cfg: dict, output_dir: str | None = None):
         predict_with_generate=bool(t.get("predict_with_generate", True)),
         generation_max_length=int(gen.get("max_new_tokens", 128)),
         generation_num_beams=int(gen.get("num_beams", 4)),
+        log_level="info",
     )
 
     # Xử lý các tham số không hợp lệ hoặc deprecated trong transformers 5.x
