@@ -673,6 +673,22 @@ def main() -> None:
     if cfg_resume and not resume_ckpt:
         resume_ckpt = cfg_resume
 
+    # Patch trainer_state.json to fix transformers version mismatch error
+    if resume_ckpt:
+        trainer_state_path = Path(resume_ckpt) / "trainer_state.json"
+        if trainer_state_path.exists():
+            import json
+            try:
+                with open(trainer_state_path, "r", encoding="utf-8") as f:
+                    state_data = json.load(f)
+                if "best_global_step" in state_data:
+                    del state_data["best_global_step"]
+                    with open(trainer_state_path, "w", encoding="utf-8") as f:
+                        json.dump(state_data, f, indent=2)
+                    logger.info(f"Đã patch {trainer_state_path} (xóa best_global_step)")
+            except Exception as e:
+                logger.warning("Không thể patch trainer_state.json: %s", e)
+
     # ── Load tokenizer ────────────────────────────────────────────────────────
     model_name = cfg["model"]["name_or_path"]
     model_revision = cfg["model"].get("revision", "main")
