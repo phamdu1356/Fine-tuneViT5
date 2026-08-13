@@ -50,7 +50,7 @@ training:
   # Batch size & Gradient Accumulation
   # effective_batch_size = per_device_train_batch_size * gradient_accumulation_steps * num_gpus
   per_device_train_batch_size: 32    # Tối ưu cho RTX 5090 32 GB
-  per_device_eval_batch_size: 16     # Beam search dùng đỉnh VRAM cao hơn training
+  per_device_eval_batch_size: 64     # Đẩy lên max 64 vì đã tắt Beam Search
   gradient_accumulation_steps: 1     # Giữ effective batch = 32 trên 1 GPU
 
   # Learning rate & Schedule
@@ -107,7 +107,7 @@ training:
 # ─────────────────────────────────────────────
 generation:
   max_new_tokens: 128
-  num_beams: 4                       # beam search; 1 = greedy (nhanh hơn, kém hơn)
+  num_beams: 1                       # Tắt Beam Search (dùng greedy) để tốc độ Eval tăng x5 lần
   early_stopping: true
   no_repeat_ngram_size: 3            # tránh lặp 3-gram
   length_penalty: 1.0               # > 1.0 ưu tiên output dài hơn
