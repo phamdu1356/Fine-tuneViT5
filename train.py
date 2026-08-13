@@ -51,21 +51,12 @@ if hasattr(sys.stdout, 'buffer') and sys.stdout.encoding and sys.stdout.encoding
 # Fix PyTorch 2.6 weights_only=True load error for numpy arrays in rng_state.pth
 try:
     import torch
-    import numpy as np
-    try:
-        import numpy.core.multiarray
-        torch.serialization.add_safe_globals([numpy.core.multiarray._reconstruct])
-    except (ImportError, AttributeError):
-        pass
-    try:
-        import numpy._core.multiarray
-        torch.serialization.add_safe_globals([numpy._core.multiarray._reconstruct])
-    except (ImportError, AttributeError):
-        pass
-    try:
-        torch.serialization.add_safe_globals([np.ndarray])
-    except Exception:
-        pass
+    _original_torch_load = torch.load
+    def _patched_torch_load(*args, **kwargs):
+        if "weights_only" not in kwargs:
+            kwargs["weights_only"] = False
+        return _original_torch_load(*args, **kwargs)
+    torch.load = _patched_torch_load
 except Exception:
     pass
 
