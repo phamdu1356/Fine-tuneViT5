@@ -1,0 +1,40 @@
+================================================================================
+ID: v2-train-000001
+REFERENCE: Với bản_tính ham chơi , lười làm , có nhiều tiền_án tiền_sự , lại nghiện ma_tuý , Thương đã đột_nhập vào nhà chú ruột để trộm hơn 1 tạ thóc và hơn 8 triệu đồng mang đi tiêu_xài .
+PREDICTION: *_+___ án__Z_[_]_ch!_tố>_tửj_ch&_phạtW_chỴ_tượngẼ_phép chất ma_tuý,Ỡ_Ẫ_an TP. Hưng_YênẲ_trạt 2 năm 3 tháng tù_giam,Ằ_anÕ Ngày 27/3, đối_tương Thương đã khai nhận hành_vi phạm_tội của mình.Ẻ_vụẶ_an tỉnh Hưng_Ờên xử-phạt 2,5 triệu đồng. Đến ngày 28/3
+================================================================================
+ID: v2-train-000002
+REFERENCE: Mâu_thuẫn từ trước đó , 2 nhóm thanh_niên với số_lượng khoảng bốn chục người đã mang theo hung_khí , dàn trận đánh nhau trên quốc_lộ 57 , đoạn thuộc xã Thành_An , huyện Mỏ_Cày_Bắc ( Bến_Tre ) .
+PREDICTION: *_+__ mặt tại hiện_Z_[_]_!_>_j_hiện_&_trườngW_Ỵ_mặt tại hiện-trường. Hiện, lực_lượng công_an đã_chóng_biến_tấtẼ 3Ỡ_tô bị đập phá hư_hỏng. Theo thông_Ẫ_nhânẲ_nhiênẰ_an huyện Mỏ_Cày_Bắc, tạm giữ 16 thanh_niên cùng tang_vật. Được biết, khoảng 13h ngày 31/7, nhận tin báo của người_
+================================================================================
+ID: v2-train-000003
+REFERENCE: Để có tiền mua ma_tuý , tiêu_xài cá_nhân , Nhật và Đơ đã rủ nhau gỡ sắt , ốc , bulong trên đường ra xe_lửa đem bán .
+PREDICTION: *_+___ mặt tại hiện_trường, nhanh_Z_[_]_!_>_hiện công_an đang tạm giữ 2 đối_tượng.j_&_W_Ỵ_trựcẼ,,Ỡ,Ẫ,,,Ẳ_sắt Bắc_Nam đem đi bán lấy tiền mua ma_tuý. Cả hai đã cùng nhau tháo_cắp tài_sản. Sau đó, cả hai cùng nhau đi tháo trộm đường_Sắt để bán. Vụ_việc đang được cơ_quan chức_năng tiếp_tục xác_minh
+================================================================================
+ID: v2-train-000005
+REFERENCE: Xuống nhà_xe chung_cư Hà_Đô lấy xe , một người_dân bàng_hoàng phát_hiện chiếc xế hộp tiền tỷ của mình sau một đêm đã không_cánh_mà_bay .
+PREDICTION: *_+_nhiên__Z_[_]_!_>_tra truy_xét.j_&_soátW_Ỵ_Ẽ_tô hiệu Ford_Ranger. TheoỠ_Ẫ_Tra, ngày 17/3, Công_an quận Gò_Vấp, thông_tin trên báo Sài_Gòn Giải_Phóng, ngày_17_3,Ẳ_Ằ_tô, biển kiểm-soát : 51C-980.xx bị mất. Thông_tin từ báo Thanh-Tra cho biết,Õ biển kiểm_
+================================================================================
+ID: v2-train-000009
+REFERENCE: Thắng chở Thy vượt đèn_đỏ , khi biết có chiến_sĩ công_an đuổi theo , Thắng rồ ga chạy nhanh . Khi các chiến_sĩ đuổi kịp , Thắng dùng chân đạp ngã xe khiến 1 chiến_sĩ bị_thương .
+PREDICTION: *_+_chỉ__Z_[_]_!_sĩ công_an đang làm_việc tại đây thì Thắng rú ga vượt đèn_đỏ. Khi đến ngã tư Quang_Trung, Thắng đạp ngã 2 cảnh_sát.>_độngj_tục truy_đuổi. Thắng&_tiênW_Ỵ_tự,Ẽ_tư,Ỡ_chất,Ẫ_Đỏ.Ẳ_chức_năng.Ằ_hỏng phần đầu.Õ Thy lúc bị đuổi theo.Ẻ_hớẶ_ỖẸỸÈ_
+================================================================================
+ID: v2-train-000012
+REFERENCE: Trong quá_trình đương_chức , các đối_tượng đã thực_hiện bán , cấp đất nghĩa_trang sai quy_định .
+PREDICTION: *_Nam_Đông+___Z_tố[_]_!_định là 4,5 m2. Ngoài_ra, ông Bình còn cấp đất nghĩa_trang trái_pháp cho 10 trường_hợp khác. Trong_ra>_nhậnj_tịch UBND phường Điện_Bàn. Ông Thân_Cầu, nguyên_viên ban_chức_năng cùng về hành_vi lạm_quyền trong khi thi_hành công_vụ, bị_can và_&_tịnhW_Ỵ_TrangẼ_Nam
+================================================================================
+ID: v2-train-000015
+REFERENCE: Mới_đây , liên_quan đến nghi_án chồng giết vợ rồi cắt xác phi_tang trên địa_bàn thị_trấn Xuân_Mai , Hà_Nội xảy ra vào tháng 1/2019 , quá_trình điều_tra xác_định nghi_can trong vụ án là ông Đ. N.A . ( SN 1964 , trú tại huyện Đông_Anh , Hà_Nội ) .
+PREDICTION: *_+___Z_[_]_!_>_canj_Tin_&_can trong vụ_việc trên. Theo tìm_hiểu của PV, ông Đ. N.A., là nghi_can thứ hai trong_vụ giết người ở Hà_Nội, bà Lâm cho_biết : "W_Ỵ_độngẼ_kiệmỠ_đỡ hàng_xóm, họ_Ẫ_canẲ_ẰÕ,Ẻ tin ". Được biết, ông L., tên thường gọi là L., trú tại thôn Giao_Tác
+================================================================================
+ID: v2-train-000016
+REFERENCE: Phần_đông dư_luận đều cho_rằng , việc khởi_tố ông Nguyễn_Hữu_Linh là đúng , được nhiều người ủng_hộ . Bởi , cựu Viện phó VKSND TP. Đà_Nẵng là người quá am_tường về pháp_luật mà_lại vi_phạm thì cần xử_lý nghiêm_khắc .
+PREDICTION: *_+___Z_Nẵng[_]_!_Chí_Minh đã có kết_báo về việc khởi_tố ông Nguyễn_Hữu_Linh. Tuy_nhiên, ông_>_j_nghị_&_vụW_Ỵ_luận cho_rằng, bị_can,ẼăngỠ_độngẪ_việcẲ_nhậnẰ_sưÕ Viện phó VKSND TP. Đà_Nẳng,Ẻ ông Lợi cho biết thêm, sau khi nghỉ hưu, ông Linh sẽ được xem_xét xử_l
+================================================================================
+ID: v2-train-000017
+REFERENCE: Sau khi đâm vợ bằng một nhát dao , Nguyễn_Xuân_Tân lên xe_máy về nhà rồi gọi điện cho người_thân vay 10 triệu đồng để đưa vợ đi viện . Tân không ngờ , đó là nhát dao chí mạng giết chết người vợ …
+PREDICTION: *_+___Z_[_]_!_tiếng>_chúng tôi_j_&_tếW_Ỵ_thuậnẼ đãỠ_thoảng cóẪ_nhânẲ_chồng Tân đãẰ_chếÕ Sau khi đâm vợ, Tân đã tử_vong ngay sau đó.Ẻ Tân đã dùng dao đâm chết vợ.Ặ Tân đã nhẫn_tâm giết vợ. Tuy nhiên, sau đó, do vết_thương quá nặng, nên mới dùng dao chém vợ. Thế_lại,Ỗ "Ẹ " "Ỹ_lànhÈ_
+================================================================================
+ID: v2-train-000020
+REFERENCE: Bị lực_lượng chức_năng truy_nã về tội Lừa_đảo chiếm đoạn tài_sản và Giả_mạo trong công_tác , Trương_Huy_Kiên ( SN 1970 ) , nguyên cán_bộ địa_chính xã Nghĩa_Xuân , huyện Quỳ_Hợp đã nhanh chân bỏ trốn khỏi địa_phương . Hắn lấy giấy_tờ tuỳ_thân một người em kết_nghĩa đã mất làm vỏ bọc trốn nã 12 năm .
+PREDICTION: *_+___Z_hiện[_]_!_trình truy_nã>_vi giả_mạo trong công_tác.j_&_gianW_Ỵ_vụẼ_đảo chiếm_đoạt tài_sản,Ỡ_Ẫ_tiệnẲ_nhiênẰ_nhậnÕ Năm 2004 - 2010, Kiên_nhập_địnhẺẶẶ_nhân của mình, hắn_Ỗ_hắn_làm giả bìa đất của các hộ dân ở xã Nghĩa_Xuân, huyện Quỳ_H

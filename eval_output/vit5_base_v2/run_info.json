@@ -1,0 +1,22 @@
+{
+  "model_name_or_path": "VietAI/vit5-base",
+  "tokenizer_path": "VietAI/vit5-base",
+  "dataset_path": "D:\\code\\Fine-tuneViT5\\data\\processed\\v2\\vietnews_v2.parquet",
+  "dataset_sha256": "8064243b0e8fc6dbb841fe459d7440f87a12b7b8515f45f932c47112a8451681",
+  "split": "test",
+  "num_samples": 28762,
+  "device": "cuda",
+  "batch_size": 12,
+  "max_source_length": 1024,
+  "generation": {
+    "num_beams": 4,
+    "max_new_tokens": 128,
+    "do_sample": false,
+    "no_repeat_ngram_size": 3,
+    "early_stopping": false,
+    "length_penalty": 1.0
+  },
+  "prediction_file": "D:\\code\\Fine-tuneViT5\\eval_output\\vit5_base_v2\\predictions.jsonl.gz",
+  "elapsed_seconds": 19434.738576889038,
+  "seed": 42
+}
