@@ -7,7 +7,7 @@ import torch
 from bert_score import score
 
 
-CONFIG_PATH = "configs/eval_smoke.yaml"
+CONFIG_PATH = "configs/eval_finetune_v2.yaml"
 
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     cfg = yaml.safe_load(f)

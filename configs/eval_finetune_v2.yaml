@@ -1,5 +1,7 @@
 model:
   name_or_path: "VietAI/vit5-base" #sửa path model để load finetuned
+  adapter_path: "outputs/lora_vit5_v2/checkpoint-29210"
+  tokenizer_path: "outputs/lora_vit5_v2/checkpoint-29210"
   revision: "main" # không rõ finetune có cần dòng này không :V chắc không nên sau bỏ
   use_fast_tokenizer: true
 
@@ -31,10 +33,10 @@ evaluation:
   limit: null
   bertscore_model_type: "xlm-roberta-base"
   bertscore_language: "vi"
-  bertscore_batch_size: 4
+  bertscore_batch_size: 32
 
 output:
-  root_dir: "eval_output/finetune"
+  root_dir: "eval_output/finetune_qlora"
   predictions_filename: "predictions.jsonl.gz"
   metrics_filename: "metrics.json"
   run_info_filename: "run_info.json"

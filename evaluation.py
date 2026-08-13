@@ -13,12 +13,13 @@ import torch
 import yaml
 from tqdm.auto import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from peft import PeftModel
 import hashlib
 
 # ============================================================
 # Cell 1 — Đọc cấu hình
 # ============================================================
-CONFIG_PATH = "configs/eval_smoke.yaml"
+CONFIG_PATH = "configs/eval_finetune_v2.yaml"
 
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     cfg = yaml.safe_load(f)
@@ -29,12 +30,17 @@ print("Loaded config:", CONFIG_PATH)
 # ============================================================
 # Cell 2 — Chọn model
 # ============================================================
-MODEL_PATH = cfg["model"]["name_or_path"]
-MODEL_REVISION = cfg["model"].get("revision", "main")
+        # MODEL_PATH = cfg["model"]["name_or_path"]
+        # MODEL_REVISION = cfg["model"].get("revision", "main")
 
-# Chỉ dùng cho progress bar và run_info; không tạo thêm thư mục output.
+        # # Chỉ dùng cho progress bar và run_info; không tạo thêm thư mục output.
+        # RUN_NAME = Path(cfg["output"]["root_dir"]).name
+
+BASE_MODEL_PATH = cfg["model"]["name_or_path"]
+ADAPTER_PATH = cfg["model"]["adapter_path"]
+TOKENIZER_PATH = cfg["model"].get("tokenizer_path", ADAPTER_PATH)
+MODEL_REVISION = cfg["model"].get("revision")
 RUN_NAME = Path(cfg["output"]["root_dir"]).name
-
 
 # ============================================================
 # Cell 3 — Kiểm tra device
@@ -151,26 +157,65 @@ print(df_test[split_column].value_counts())
 # ============================================================
 # Cell 6 — Nạp tokenizer và model
 # ============================================================
+        # use_fast = cfg["model"].get("use_fast_tokenizer", True)
+        # tokenizer_kwargs = {"use_fast": use_fast}
+
+        # if MODEL_REVISION:
+        #     tokenizer_kwargs["revision"] = MODEL_REVISION
+
+        # tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, **tokenizer_kwargs)
+
+        # model_kwargs = {}
+        # if MODEL_REVISION:
+        #     model_kwargs["revision"] = MODEL_REVISION
+
+        # model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_PATH, **model_kwargs)
+
+        # model.to(device)
+        # model.eval()
+
+        # print("Model loaded from:", MODEL_PATH)
+        # print("Tokenizer fast:", use_fast)
+        # print("Vocab size:", len(tokenizer))
+
 use_fast = cfg["model"].get("use_fast_tokenizer", True)
-tokenizer_kwargs = {"use_fast": use_fast}
+
+tokenizer = AutoTokenizer.from_pretrained(
+    TOKENIZER_PATH,
+    use_fast=use_fast,
+)
+
+base_model_kwargs = {}
 
 if MODEL_REVISION:
-    tokenizer_kwargs["revision"] = MODEL_REVISION
+    base_model_kwargs["revision"] = MODEL_REVISION
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, **tokenizer_kwargs)
+base_model = AutoModelForSeq2SeqLM.from_pretrained(
+    BASE_MODEL_PATH,
+    **base_model_kwargs,
+)
 
-model_kwargs = {}
-if MODEL_REVISION:
-    model_kwargs["revision"] = MODEL_REVISION
+model = PeftModel.from_pretrained(
+    base_model,
+    ADAPTER_PATH,
+)
 
-model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_PATH, **model_kwargs)
 model.to(device)
 model.eval()
 
-print("Model loaded from:", MODEL_PATH)
+print("Base model loaded from:", BASE_MODEL_PATH)
+print("LoRA adapter loaded from:", ADAPTER_PATH)
+print("Tokenizer loaded from:", TOKENIZER_PATH)
 print("Tokenizer fast:", use_fast)
 print("Vocab size:", len(tokenizer))
-
+print(
+    "Trainable parameters:",
+    sum(p.numel() for p in model.parameters() if p.requires_grad),
+)
+print(
+    "Total parameters:",
+    sum(p.numel() for p in model.parameters()),
+)
 
 # ============================================================
 # Cell 7 — Cấu hình generation
@@ -184,7 +229,7 @@ generation_kwargs = {
     "max_new_tokens": int(gen_cfg["max_new_tokens"]),
     "do_sample": bool(gen_cfg["do_sample"]),
     "no_repeat_ngram_size": int(gen_cfg["no_repeat_ngram_size"]),
-    "early_stopping": bool(gen_cfg.get("early_stopping", True)),
+    "early_stopping": bool(gen_cfg.get("early_stopping", False)),
     "length_penalty": float(gen_cfg.get("length_penalty", 1.0)),
 }
 print("Generation config:", generation_kwargs)
@@ -298,7 +343,9 @@ with open(metrics_path, "w", encoding="utf-8") as f:
 
 run_info = {
     "run_name": RUN_NAME,
-    "model_path": str(MODEL_PATH),
+    "base_model_path": str(BASE_MODEL_PATH),
+    "adapter_path": str(ADAPTER_PATH),
+    "tokenizer_path": str(TOKENIZER_PATH),
     "dataset_path": str(parquet_path),
     "split": split_name,
     "num_samples": len(df_test),
