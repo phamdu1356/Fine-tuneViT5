@@ -49,9 +49,9 @@ training:
 
   # Batch size & Gradient Accumulation
   # effective_batch_size = per_device_train_batch_size * gradient_accumulation_steps * num_gpus
-  per_device_train_batch_size: 32    # Tối ưu cho RTX 5090 32 GB
-  per_device_eval_batch_size: 64     # Đẩy lên max 64 vì đã tắt Beam Search
-  gradient_accumulation_steps: 1     # Giữ effective batch = 32 trên 1 GPU
+  per_device_train_batch_size: 16    # Giảm xuống 16 để tránh OOM
+  per_device_eval_batch_size: 16     # Giảm xuống 16 cho an toàn
+  gradient_accumulation_steps: 2     # Tăng lên 2 để giữ tổng effective batch = 32
 
   # Learning rate & Schedule
   learning_rate: 5.0e-4             # T5 thường dùng LR cao hơn BERT-family
